@@ -1,8 +1,12 @@
 <template>
   	<section class="article">
 		<h3 class="article__title">{{news.title}}</h3>
-		<p class="article__content">{{news.article}}</p>
-		<span class="article__delete">&times;</span>
+		<p class="article__content">{{news.content}}</p>
+		<span 
+			class="article__delete" 
+			@click="$emit('delete-news', news.id)">
+			&times;
+		</span>
 	</section>
 </template>
 

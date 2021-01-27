@@ -4,12 +4,14 @@
 		<Content 
 			:data="{postsArray, newsArray}"
 			@toggle-modal="toggleModal($event)"
+			@delete-news="deleteNews($event)"
 		/>
 		<Footer />
 		<Modal 
 			:options="modal"
 			:show="showModal"
 			@toggle-modal="toggleModal(false)"
+			@add-news="addNews($event)"
 		/>
     </div>
 </template>
@@ -60,6 +62,20 @@ export default {
 					closable: true
 				}
 			this.showModal = !this.showModal
+		},
+		addNews(data) {
+			const {title, content} = data
+			this.showModal = !this.showModal
+			this.newsArray.push({
+				title,
+				content,
+				id: Date.now()
+			})
+			toLocal(this.newsArray, 'news')
+		},
+		deleteNews(id) {
+			this.newsArray = this.newsArray.filter(el => el.id !== id)
+			toLocal(this.newsArray, 'news')
 		}
 	}
 }	

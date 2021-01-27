@@ -45,12 +45,14 @@
 					</textarea>
 				</form>
 				<form v-else class="new-aritcle">
-					<input 
+					<input
+						v-model="newArticle.title"
 						name="title" 
 						class="new-article__title" 
 						type="text" 
 						placeholder="Title">
 					<textarea 
+						v-model="newArticle.content"
 						name="article" 
 						class="new-article__content" 
 						type="text" 
@@ -58,13 +60,25 @@
 					</textarea>
 				</form>
 			</div>
-			<div 
+			<!-- <div 
 				v-if="options.btns"
 				class="modal__footer">
 				<button 
 					v-for="btn in options.btns"
 					@click="btn.handler()"
 					:key="btn.text">{{btn.text}}</button>
+			</div> -->
+			<div class="modal__footer">
+				<button 
+					class="modal__button ok"
+					@click="addNews()">
+					Add
+				</button>
+				<button 
+					class="modal__button cancel"
+					@click="$emit('toggle-modal')">
+					Cancel
+				</button>
 			</div>
 		</div>
 	</aside>
@@ -82,6 +96,23 @@ export default {
 		show: {
 			Type: Boolean,
 			required: true
+		}
+	},
+	data() {
+		return {
+			newArticle: {
+				title: '',
+				content: ''
+			}
+		}
+	},
+	methods: {
+		addNews() {
+			this.$emit('add-news', this.newArticle)
+			this.newArticle = {
+				title: '',
+				content: ''
+			}
 		}
 	},
 	mounted() {

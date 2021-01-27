@@ -27,7 +27,7 @@
 					<template v-if="data.postsArray.length">
 						<Post
 						v-for="post in data.postsArray"
-						:key="post.title"
+						:key="post.id"
 						:post="post"
 						/>
 					</template>
@@ -37,8 +37,9 @@
 					<template v-if="data.newsArray.length">
 						<News 
 							v-for="news in data.newsArray"
-							:key="news.title"
+							:key="news.id"
 							:news="news"
+							@delete-news="$emit('delete-news', $event)"
 						/>
 					</template>
 					<div v-else class="no-content">There is no news right now...</div>
@@ -81,11 +82,6 @@ export default {
 			],
 			content: 0,
 			change: false
-		}
-	},
-	computed: {
-		change() {
-			return this.change
 		}
 	},
 	methods: {

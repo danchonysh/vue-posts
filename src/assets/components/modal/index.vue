@@ -21,44 +21,11 @@
 				class="modal__close" 
 				@click="$emit('toggle-modal')">&times;</span>
 			<h2 class="modal__header">{{options.title}}</h2>
-			<div class="modal__content">
-				<form 
-					v-if="options.post" 
-					class="new-post" 
-					enctype="multipart/form-data"
-					 method="post">
-					<input 
-						class="new-post__photo" 
-						id="file" 
-						type="file" 
-						accept="image/*">
-					<label 
-						for="file" 
-						class="upload">
-						Choose a file
-					</label>
-					<textarea 
-						name="article" 
-						class="new-post__content" 
-						type="text" 
-						placeholder="Write something">
-					</textarea>
-				</form>
-				<form v-else class="new-aritcle">
-					<input
-						v-model="newArticle.title"
-						name="title" 
-						class="new-article__title" 
-						type="text" 
-						placeholder="Title">
-					<textarea 
-						v-model="newArticle.content"
-						name="article" 
-						class="new-article__content" 
-						type="text" 
-						placeholder="Article">
-					</textarea>
-				</form>
+			<div class="modal__content" v-html="options.content">
+				
+				<div class="warning">
+					You must enter title and content.
+				</div>
 			</div>
 			<!-- <div 
 				v-if="options.btns"
@@ -66,6 +33,7 @@
 				<button 
 					v-for="btn in options.btns"
 					@click="btn.handler()"
+					:class="`modal__button ${btn.type}`"
 					:key="btn.text">{{btn.text}}</button>
 			</div> -->
 			<div class="modal__footer">

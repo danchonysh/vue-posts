@@ -36,46 +36,125 @@ export default {
 	data() {
 		return {
 			showModal: false,
-			modal: {
-				title: 'Test modal',
-				closable: true
-			},
 			newsArray: localStorage.getItem('news') 
 				? JSON.parse(localStorage.getItem('news'))  
 				: [],
 			postsArray: localStorage.getItem('posts') 
 				? JSON.parse(localStorage.getItem('posts'))  
-				: []
+				: [],
+			option: 'news'
 		}
 	},
 	methods: {
 		toggleModal(option) {
-			this.modal = option 
-				? {
-					title: 'Adding post',
-					post: true,
-					closable: true
-				} 
-				: {
-					title: 'Adding news',
-					post: false,
-					closable: true
-				}
+			this. option = option 
 			this.showModal = !this.showModal
 		},
 		addNews(data) {
 			const {title, content} = data
-			this.showModal = !this.showModal
-			this.newsArray.push({
-				title,
-				content,
-				id: Date.now()
-			})
-			toLocal(this.newsArray, 'news')
+			if (title.trim() !== '' && content.trim() !== '') {
+				this.showModal = !this.showModal
+				this.newsArray.push({
+					title,
+					content,
+					id: Date.now()
+				})
+				toLocal(this.newsArray, 'news')
+			} else {
+				this.option = 'warning'
+			}
 		},
 		deleteNews(id) {
 			this.newsArray = this.newsArray.filter(el => el.id !== id)
 			toLocal(this.newsArray, 'news')
+		}
+	},
+	computed: {
+		modal() {
+			switch (this.option) { 
+				case 0: 
+					return {
+						title: 'Adding news',
+						type: 'news',
+						closable: false,
+						content: `
+							<form 
+								onsubmit="e => e.preventDefault()"
+								v-if="options.type === 'news'" class="new-aritcle">
+								<input
+									v-model="newArticle.title"
+									name="title" 
+									class="new-article__title" 
+									type="text" 
+									placeholder="Title">
+								<textarea 
+									v-model="newArticle.content"
+									name="article" 
+									class="new-article__content" 
+									type="text" 
+									placeholder="Article">
+								</textarea>
+							</form>
+						`,
+						/*btns: [
+							{
+								type: 'ok',
+								text: 'Add',
+								handler() {
+									this.$emit('add-news', this.newArticle)
+									this.newArticle = {
+										title: '',
+										content: ''
+									}
+								}
+							},
+							{
+								type: 'cancel',
+								text: 'Cancel',
+								handler() {
+
+								} 
+							}
+						]*/
+					}
+				case 1: 
+						return {
+						title: 'Adding post',
+						type: 'post',
+						content: `
+							<form 
+								@submit.prevent=""
+								v-if="options.type === 'post'" 
+								class="new-post" 
+								enctype="multipart/form-data"
+								method="post">
+								<input 
+									class="new-post__photo" 
+									id="file" 
+									type="file" 
+									accept="image/*">
+								<label 
+									for="file" 
+									class="upload">
+									Choose a file
+								</label>
+								<textarea 
+									name="article" 
+									class="new-post__content" 
+									type="text" 
+									placeholder="Write something">
+								</textarea>
+							</form>
+						`,
+						closable: false
+					}
+				default: 
+					return {
+						title: 'Adding news',
+						type: 'warning',
+						closable: true
+					}
+			}
 		}
 	}
 }	

@@ -1,0 +1,79 @@
+@import '../../scss/btn.scss';
+
+main {
+	flex: 1 0 auto;
+}
+
+.content {
+	overflow: hidden;
+	margin: 30px auto;
+	&__item {
+		margin: 20px;
+	}
+}
+
+.btn-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	height: 6rem;
+}
+
+.tab__item {
+	margin: 0 auto;
+	padding: 0 .5rem;
+	&.change {
+		animation: change .5s;
+	}
+}
+
+@keyframes change {
+	0% {
+		opacity: 1;
+		transform: translateX(0); 
+	}
+	50% {
+		opacity: 0;
+		transform: translateX(100%); 
+	}
+	51% {
+		opacity: 0;
+		transform: translateX(-100%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.news, .posts {
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.add {
+	@include btn;
+	border-radius: 2rem;
+	background-color: inherit;
+	border: solid 1px lightgray;
+	color: gray;
+	transition-property: opacity, background-color, border-color;
+	transition-duration: .2s;
+	&:hover {
+		border-color: rgb(252, 199, 102);
+		background-color: rgb(252, 199, 102);
+		color: white;
+		cursor: pointer;
+	}	
+	&:active {
+		background-color: tomato;
+		border-color: tomato;
+	}
+}
+
+.no-content {
+	width: min(300px, 50%); 
+}

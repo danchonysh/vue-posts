@@ -27,7 +27,7 @@
 					<template v-if="allPosts.length">
 						<Post
 							v-for="post in allPosts"
-							:key="post.id"
+							:key="post._id"
 							:post="post"
 						/>
 					</template>
@@ -37,7 +37,7 @@
 					<template v-if="allNews.length">
 						<News 
 							v-for="news in allNews"
-							:key="news.id"
+							:key="news._id"
 							:news="news"
 						/>
 					</template>
@@ -56,12 +56,13 @@ import Tab from '../../components/tab'
 import Post from '../../components/post'
 import News from '../../components/news'
 
-
 export default {
 	components: { Tab, Post, News },
-	computed: mapGetters(['allNews', 'allPosts', 'tabs', 'display', 'changing']),
+	computed: {
+		...mapGetters(['allPosts', 'allNews', 'tabs', 'display', 'changing'])
+	},	
 	methods: {
-		...mapActions(['changeDisplay', 'changeTab', 'isChanging', 'showModal', 'changeModal']),
+		...mapActions(['changeDisplay', 'changeTab', 'isChanging', 'showModal', 'changeModal', 'getNews', 'getPosts']),
 		tabClick(idx) {
 			if (this.display !== idx) {
 				this.changeTab(idx)
@@ -78,6 +79,10 @@ export default {
 			this.changeModal({ curr })
 			this.showModal(true)
 		}
+	},
+	async mounted() {
+		await this.getNews()
+		await this.getPosts()
 	}
-}
+} 
 </script>

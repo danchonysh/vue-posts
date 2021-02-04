@@ -1,21 +1,31 @@
-import toLocal from '../../assets/libs/to-local'
+import request from '../../assets/libs/request'
+const { url } = require('../urls')
 
 export default {
 	state: {
-		news: JSON.parse(localStorage.getItem('news')) || []
+		news: []
 	},
 	actions: {
-		addNews: (ctx, data) => ctx.commit('addNews', data),
-		deleteNews: (ctx, id) => ctx.commit('deleteNews', id)
+		getNews: async (ctx) => {
+			const result = await request(`${url}news`)
+			ctx.commit('getNews', result)
+		},
+		addNews: async (ctx, data) => {
+			await request(`${url}news`, 'POST', data)
+			ctx.commit('addNews', data)
+		},
+		deleteNews: async (ctx, id) => {
+			await request(`${url}news/${id}`, 'DELETE')
+			ctx.commit('deleteNews', id)
+		}
 	},
 	mutations: {
+		getNews: (state, data) => state.news = data,
 		addNews: (state, news) => {
 			state.news.unshift(news)
-			toLocal(state.news, 'news')
 		},
 		deleteNews: (state, id) => {
-			state.news = state.news.filter(el => el.id !== id)
-			toLocal(state.news, 'news')
+			state.news = news.filter(el => el.id !== id)
 		},
 	},
 	getters: {

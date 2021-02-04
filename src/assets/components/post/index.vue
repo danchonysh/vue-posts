@@ -1,9 +1,9 @@
 <template>
   	<figure class="post">
-		<img class="post__photo" :src="post.value">
+		<img class="post__photo" :src="post.image">
 		<caption class="post__text">{{post.caption}}</caption>
 		<p class="post__time">{{formatted}}</p>
-		<span class="post__delete" @click="deletePost(post.id)">&times;</span>
+		<span class="post__delete" @click="deletePost(post._id)">&times;</span>
 	</figure>
 </template>
 

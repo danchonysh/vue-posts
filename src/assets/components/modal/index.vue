@@ -137,8 +137,7 @@ export default {
 					this.addNews({
 						title,
 						content,
-						date: new Date(Date.now()).toLocaleString(),
-						id: 'n' + Date.now()
+						date: new Date(Date.now()).toLocaleString()
 					})
 					this.newArticle = {
 						title: '',
@@ -155,8 +154,7 @@ export default {
 					this.addPost({
 						caption,
 						value,
-						date: new Date(Date.now()).toLocaleString(),
-						id: 'p' + Date.now()
+						date: new Date(Date.now()).toLocaleString()
 					})
 					this.newPost = {
 						caption: '',

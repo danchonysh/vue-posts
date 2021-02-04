@@ -1,11 +1,11 @@
 <template>
   	<section class="article">
 		<h3 class="article__title">{{news.title}}</h3>
-		<pre class="article__content">{{news.content}}</pre>
+		<pre class="article__content">{{news.article}}</pre>
 		<p class="article__time">{{formatted}}</p>
 		<span 
 			class="article__delete" 
-			@click="deleteNews(news.id)">
+			@click="deleteNews(news._id)">
 			&times;
 		</span>
 	</section>

@@ -20,12 +20,12 @@ export default {
 		}
 	},
 	mutations: {
-		getNews: (state, data) => state.news = data,
+		getNews: (state, data) => state.news = data.reverse(),
 		addNews: (state, news) => {
 			state.news.unshift(news)
 		},
 		deleteNews: (state, id) => {
-			state.news = news.filter(el => el.id !== id)
+			state.news = state.news.filter(el => el._id !== id)
 		},
 	},
 	getters: {

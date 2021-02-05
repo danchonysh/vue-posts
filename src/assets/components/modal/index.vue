@@ -59,7 +59,7 @@
 						type="text" 
 						placeholder="Title">
 					<textarea 
-						v-model="newArticle.content"
+						v-model="newArticle.article"
 						name="article" 
 						class="new-article__content" 
 						type="text" 
@@ -98,11 +98,11 @@ export default {
 		return {
 			newArticle: {
 				title: '',
-				content: ''
+				article: ''
 			},
 			newPost: {
 				caption: '',
-				value: ''
+				image: ''
 			},
 			text: defaultText,
 		}
@@ -117,7 +117,7 @@ export default {
 				? fileName.slice(0,12) + '...'
 				: fileName
 			reader.onload = e => {
-				this.newPost.value = e.target.result
+				this.newPost.image = e.target.result
 			}
 		},
 		smoothChange(curr, prev = 'news') {
@@ -131,34 +131,34 @@ export default {
 			const type = this.getModal.type
 			if (type === 'news') {
 				const title = this.newArticle.title.trim()
-				const content = this.newArticle.content.trim()
-				if (title && content) {
+				const article = this.newArticle.article.trim()
+				if (title && article) {
 					this.showModal(false)
 					this.addNews({
 						title,
-						content,
+						article,
 						date: new Date(Date.now()).toLocaleString()
 					})
 					this.newArticle = {
 						title: '',
-						content: ''
+						article: ''
 					}
 				} else {
 					this.smoothChange('warn', 'news')
 				}
 			}
 			if (type === 'post') {
-				const { caption, value } = this.newPost
-				if (caption.trim() && value) {
+				const { caption, image } = this.newPost
+				if (caption.trim() && image) {
 					this.showModal(false)
 					this.addPost({
 						caption,
-						value,
+						image,
 						date: new Date(Date.now()).toLocaleString()
 					})
 					this.newPost = {
 						caption: '',
-						value: ''
+						image: ''
 					}
 					setTimeout(() => this.text = defaultText, 500)
 				} else {

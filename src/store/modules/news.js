@@ -11,8 +11,8 @@ export default {
 			ctx.commit('getNews', result)
 		},
 		addNews: async (ctx, data) => {
-			await request(`${url}news`, 'POST', data)
-			ctx.commit('addNews', data)
+			const item = await request(`${url}news`, 'POST', data)
+			ctx.commit('addNews', item)
 		},
 		deleteNews: async (ctx, id) => {
 			await request(`${url}news/${id}`, 'DELETE')

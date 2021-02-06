@@ -20,7 +20,7 @@ export default {
 		}
 	},
 	mutations: {
-		getNews: (state, data) => state.news = data.reverse(),
+		getNews: (state, data) => state.news = data,
 		addNews: (state, news) => {
 			state.news.unshift(news)
 		},

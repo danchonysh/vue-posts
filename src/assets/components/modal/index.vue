@@ -23,14 +23,15 @@
 			<h2 class="modal__header">{{getModal.title}}</h2>
 			<div class="modal__content">
 				<form 
-					@submit.prevent=""
+					@submit.prevent="submit()"
+					ref="form"
 					v-if="getModal.type === 'post'" 
 					class="new-post" 
-					enctype="multipart/form-data"
-					method="post">
+					enctype="multipart/form-data">
 					<input 
 						@change="fileHandler()"
 						ref="file"
+						name="image"
 						class="new-post__photo" 
 						id="file" 
 						type="file" 
@@ -42,7 +43,7 @@
 					</label>
 					<textarea 
 						v-model="newPost.caption"
-						name="article" 
+						name="caption" 
 						class="new-post__content" 
 						type="text" 
 						placeholder="Write something">
@@ -151,11 +152,16 @@ export default {
 				const { caption, image } = this.newPost
 				if (caption.trim() && image) {
 					this.showModal(false)
-					this.addPost({
-						caption,
-						image,
-						date: new Date(Date.now()).toLocaleString()
-					})
+					const formData = new FormData(this.$refs.form)
+					const form = Object.fromEntries(formData.entries())
+					// console.log(post)
+					// this.addPost(post)
+					const post = new FormData()
+					for (let key in form) {
+						post.append(key, form[key])
+					}
+					console.log(post)
+					this.addPost(post)
 					this.newPost = {
 						caption: '',
 						image: ''

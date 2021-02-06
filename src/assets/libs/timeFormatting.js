@@ -1,6 +1,6 @@
 export default function formatting(time, lang = 'en') {
 	const date = new Date(time)
-
+	
 	const year = date.getFullYear()
 	const month = date.getMonth() > 8 
 		? date.getMonth() + 1 

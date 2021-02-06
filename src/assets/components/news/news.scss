@@ -34,9 +34,10 @@
 		padding-top: .5rem;
 	}
 	&__delete {
+		line-height: 0;
 		position: absolute;
-		left: calc(100% - 1.5rem);
-		bottom: calc(100% - 1.5rem);
+		right: calc(100% - 1.5rem);
+		top: calc(100% - 1.25rem);
 		transform: scale(1.2);
 		transition: color .2s, transform .2s;
 		&:hover {

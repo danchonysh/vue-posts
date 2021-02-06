@@ -1,13 +1,6 @@
-async function request(url, method = 'GET', data = null) {
+async function request(url, method = 'GET', data = null, headers = {'Content-Type': 'application/json'}) {
 	try {
-		const headers = {}
-		let body
-
-		if (data) {
-			headers['Content-Type'] = 'application/json'
-			body = JSON.stringify(data)
-		}
-
+		const body = data ? JSON.stringify(data) : null
 		const response = await fetch(url, {
 			method,
 			headers,

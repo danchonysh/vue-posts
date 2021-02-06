@@ -11,8 +11,8 @@ export default {
 			ctx.commit('getPosts', result)
 		},
 		addPost: async (ctx, data) => {
-			await request(`${url}posts`, 'POST', data)
-			ctx.commit('addPost', data)
+			const item = await request(`${url}posts`, 'POST', data)
+			ctx.commit('addPost', item)
 		},
 		deletePost: async (ctx, id) => {
 			await request(`${url}posts/${id}`, 'DELETE')
@@ -25,7 +25,7 @@ export default {
 			state.posts.unshift(posts)
 		},
 		deletePost: (state, id) => {
-			state.posts = state.posts.filter(el => el.id !== id)
+			state.posts = state.posts.filter(el => el._id !== id)
 		},
 	},
 	getters: {

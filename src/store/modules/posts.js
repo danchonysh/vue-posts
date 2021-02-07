@@ -1,4 +1,5 @@
 import request from '../../assets/libs/request'
+const axios = require('axios')
 const { url } = require('../urls')
 
 export default {
@@ -11,8 +12,19 @@ export default {
 			ctx.commit('getPosts', result)
 		},
 		addPost: async (ctx, data) => {
-			const item = await request(`${url}posts`, 'POST', data)
-			ctx.commit('addPost', item)
+			// const item = await request(`${url}posts`, 'POST', data, {
+			// 	'Content-Type': 'multipart/form-data'
+			// })
+			// ctx.commit('addPost', item)
+			console.log(data)
+			const config = {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			}
+			axios.post(`${url}posts`, data, config)
+				.then(res => ctx.commit('addPost', res))
+				.catch(err => console.log(err))
 		},
 		deletePost: async (ctx, id) => {
 			await request(`${url}posts/${id}`, 'DELETE')

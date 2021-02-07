@@ -111,15 +111,12 @@ export default {
 	methods: {
 		...mapActions(['showModal', 'addNews', 'addPost', 'changeModal']),
 		fileHandler() {
-			const reader = new FileReader()
-			reader.readAsDataURL(this.$refs.file.files[0])
-			const fileName = this.$refs.file.files[0].name
+			const image = this.$refs.file.files[0]
+			this.newPost.image = image
+			const fileName = image.name
 			this.text = fileName.length > 12 
 				? fileName.slice(0,12) + '...'
 				: fileName
-			reader.onload = e => {
-				this.newPost.image = e.target.result
-			}
 		},
 		smoothChange(curr, prev = 'news') {
 			this.showModal(false)
@@ -152,16 +149,10 @@ export default {
 				const { caption, image } = this.newPost
 				if (caption.trim() && image) {
 					this.showModal(false)
-					const formData = new FormData(this.$refs.form)
-					const form = Object.fromEntries(formData.entries())
-					// console.log(post)
-					// this.addPost(post)
-					const post = new FormData()
-					for (let key in form) {
-						post.append(key, form[key])
-					}
-					console.log(post)
-					this.addPost(post)
+					const formData = new FormData()
+					formData.append('image', image)
+					formData.append('caption', caption)
+					this.addPost(formData)
 					this.newPost = {
 						caption: '',
 						image: ''

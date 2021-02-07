@@ -16,14 +16,15 @@ export default {
 			// 	'Content-Type': 'multipart/form-data'
 			// })
 			// ctx.commit('addPost', item)
-			console.log(data)
 			const config = {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			}
 			axios.post(`${url}posts`, data, config)
-				.then(res => ctx.commit('addPost', res))
+				.then(res => {
+					ctx.commit('addPost', res.data)
+				})
 				.catch(err => console.log(err))
 		},
 		deletePost: async (ctx, id) => {

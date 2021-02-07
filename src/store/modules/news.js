@@ -1,4 +1,3 @@
-import request from '../../assets/libs/request'
 const { url } = require('../urls')
 
 export default {
@@ -6,17 +5,55 @@ export default {
 		news: []
 	},
 	actions: {
-		getNews: async (ctx) => {
-			const result = await request(`${url}news`)
-			ctx.commit('getNews', result)
+		getNews: async ({ dispatch, commit }) => {
+			return new Promise((resolve, reject) => {
+				dispatch('request', {
+					url: `${url}news`,
+					success: res => {
+						commit('getNews', res.data)
+						resolve()
+					},
+					failure: err => {
+						reject(err)
+					} 
+				},
+				{
+					root: true
+				})
+			})
 		},
-		addNews: async (ctx, data) => {
-			const item = await request(`${url}news`, 'POST', data)
-			ctx.commit('addNews', item)
+		addNews: async ({ dispatch, commit }, data) => {
+			return new Promise((resolve, reject) => {
+				dispatch('request', {
+					url: `${url}news`,
+					method: 'POST',
+					data,
+					success: res => {
+						commit('addNews', res.data)
+						resolve()
+					},
+					failure: err => reject(err)
+				},
+				{
+					root: true
+				})
+			})
 		},
-		deleteNews: async (ctx, id) => {
-			await request(`${url}news/${id}`, 'DELETE')
-			ctx.commit('deleteNews', id)
+		deleteNews: async ({ dispatch, commit }, id) => {
+			return new Promise((resolve, reject) => {
+				dispatch('request', {
+					url: `${url}news/${id}`,
+					method: 'DELETE',
+					success: res => {{
+						commit('deleteNews', id)
+						resolve()
+					}},
+					failure: err => reject(err)
+				},
+				{
+					root: true
+				})
+			})
 		}
 	},
 	mutations: {

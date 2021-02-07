@@ -7,29 +7,56 @@ export default {
 		posts: []
 	},
 	actions: {
-		getPosts: async (ctx) => {
-			const result = await request(`${url}posts`)
-			ctx.commit('getPosts', result)
-		},
-		addPost: async (ctx, data) => {
-			// const item = await request(`${url}posts`, 'POST', data, {
-			// 	'Content-Type': 'multipart/form-data'
-			// })
-			// ctx.commit('addPost', item)
-			const config = {
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			}
-			axios.post(`${url}posts`, data, config)
-				.then(res => {
-					ctx.commit('addPost', res.data)
+		getPosts: async ({ dispatch, commit }) => {
+			return new Promise((resolve, reject) => {
+				dispatch('request', {
+					url: `${url}posts`,
+					success: res => {
+						commit('getPosts', res.data)
+						resolve()
+					},
+					failure: err => reject(err)
+				}, 
+				{
+					root: true
 				})
-				.catch(err => console.log(err))
+			})
 		},
-		deletePost: async (ctx, id) => {
-			await request(`${url}posts/${id}`, 'DELETE')
-			ctx.commit('deletePost', id)
+		addPost: async ({ dispatch, commit }, data) => {
+			return new Promise((resolve, reject) => {
+				dispatch('request', {
+					url: `${url}posts`,
+					method: 'POST',
+					data,
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					},
+					success: res => {
+						commit('addPost', res.data)
+						resolve()
+					},
+					failure: err => reject(err)
+				}, 
+				{
+					root: true
+				})
+			})
+		},
+		deletePost: async ({ dispatch, commit }, id) => {
+			return new Promise((resolve, reject) => {
+				dispatch('request', {
+					url: `${url}posts/${id}`,
+					method: 'DELETE',
+					success: res => {
+						commit('deletePost', id)
+						resolve()
+					},
+					failure: err => reject(err)
+				}, 
+				{
+					root: true
+				})
+			})
 		}
 	},
 	mutations: {

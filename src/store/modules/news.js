@@ -16,10 +16,7 @@ export default {
 					failure: err => {
 						reject(err)
 					} 
-				},
-				{
-					root: true
-				})
+				}, { root: true })
 			})
 		},
 		addNews: async ({ dispatch, commit }, data) => {
@@ -33,10 +30,7 @@ export default {
 						resolve()
 					},
 					failure: err => reject(err)
-				},
-				{
-					root: true
-				})
+				}, { root: true })
 			})
 		},
 		deleteNews: async ({ dispatch, commit }, id) => {
@@ -44,16 +38,28 @@ export default {
 				dispatch('request', {
 					url: `${url}news/${id}`,
 					method: 'DELETE',
-					success: res => {{
+					success: res => {
 						commit('deleteNews', id)
 						resolve()
-					}},
+					},
 					failure: err => reject(err)
-				},
-				{
-					root: true
-				})
+				}, { root: true })
 			})
+		},
+		editNews: async ({ dispatch, commit }, data) => {
+			const { id, body } = data
+			return new Promise((resolve, reject) => {
+				dispatch('request', {
+					url: `${url}news/${id}`,
+					method: 'PUT',
+					data: body,
+					success: res => {
+						commit('editNews', { body, id })
+						resolve()
+					},
+					failure: err => reject(err) 
+				})
+			}, { root: true })
 		}
 	},
 	mutations: {
@@ -64,6 +70,12 @@ export default {
 		deleteNews: (state, id) => {
 			state.news = state.news.filter(el => el._id !== id)
 		},
+		editNews: (state, { body, id }) => {
+			const item = state.news.filter(el => el._id === id)[0]
+			item.title = body.title
+			item.article = body.article
+			item.date = body.date
+		}
 	},
 	getters: {
 		allNews: state => state.news

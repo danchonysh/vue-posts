@@ -1,6 +1,6 @@
 <template>
 	<main>
-		<div class="container content">
+		<div class="content">
 			<div class="btn-wrapper">
 				<nav class="tab">					
 					<ul class="tab__list">

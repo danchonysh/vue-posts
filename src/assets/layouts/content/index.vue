@@ -24,9 +24,6 @@
 					'change' : changing
 				}">
 				<div class="posts" v-show="display">
-					<!-- <template v-if="!allPosts">
-						<div class="no-content">Loading...</div>	
-					</template> -->
 					<Loader v-if="!allPosts"/>
 					<template v-else-if="allPosts.length">
 						<Post
@@ -38,9 +35,6 @@
 					<div v-else class="no-content">There is no posts right now...</div>	
 				</div>
 				<div class="news" v-show="!display">
-					<!-- <template v-if="!allNews">
-						<div class="no-content">Loading...</div>	
-					</template> -->
 					<Loader v-if="!allNews"/>
 					<template v-else-if="allNews.length">
 						<News 

@@ -2,40 +2,48 @@
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
-	padding: .25rem .75rem;
+	justify-content: flex-end;
 	border-radius: 5px;
+	background-size: cover;
+	background-position: center;
 	margin: 1rem auto;
 	box-shadow: 0 3px 5px 3px rgba(0,0,0,.3);
-	min-width: min-content;
-	max-width: 500px;
-	&__photo {
-		width: 100%;
-		border-radius: 5px;
-	}
+	width: min(100%, 500px);
+	height: 300px;
+	overflow: hidden;
 	&__text {
-		margin: 0 auto;
-		margin-top: .5rem;
-		max-width: 400px;
-		word-wrap: break-word;
-
+		text-align: center;
+		padding: .25rem .75rem;
+		width: 100%;
+		background-color: rgba(0,0,0,.6);
+		opacity: 0;
+		transition: opacity .2s;
+		color: white;
+		white-space: pre-wrap;
+	}
+	&__footer {
+		opacity: 0;
+		transition: opacity .2s;
+		padding: .25rem .75rem;
+		background-color: rgba(0,0,0,.6);
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border-top: solid 1px lightgray;
 	}
 	&__time {
 		margin: .5rem 0;
 		display: block;
 		width: 100%;
 		text-align: right;
-		color: gray;
+		color: white;
 		font-size: .8rem;
 		border: none;
-		border-top: solid 1px lightgray;
 		padding-top: .5rem;
 	}
 	&__delete {
-		position: absolute;
-		left: calc(100% - 3rem);
 		font-size: 2rem;
-		opacity: 0;
 		color: #f9f9f9;
 		transition-property: opacity, color, transform;
 		transition-duration: .2s;
@@ -45,12 +53,12 @@
 			transform: scale(1.1);
 		}
 	}	
-	&:hover &__delete {
+	&:hover &__footer, &:hover &__text {
 		opacity: 1;
-		&:active {
-			transform: scale(.95);
-			color: rgba(255, 50, 50, 1);
-		}
+	}
+	&:hover &__delete:active {
+		transform: scale(.95);
+		color: rgba(255, 50, 50, 1);
 	}
 	&__photo {
 		filter: brightness(100%);

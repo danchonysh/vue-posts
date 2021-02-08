@@ -1,10 +1,15 @@
 <template>
-  	<figure class="post">
-		<img class="post__photo" :src="'http://localhost:3000/' + post.image">
-		<caption class="post__text">{{post.caption}}</caption>
-		<p class="post__time">{{formatted}}</p>
-		<span class="post__delete" @click="deletePost(post._id)">&times;</span>
-	</figure>
+  	<div 
+	  	class="post" 
+	  	:style="{
+		 	backgroundImage: `url(${'http://localhost:3000/' + post.image})`
+		}">
+		<p class="post__text">{{post.caption}}</p>
+		<div class="post__footer">
+			<span class="post__delete" @click="deletePost(post._id)">&times;</span>
+			<p class="post__time">{{formatted}}</p>
+		</div>
+	</div>
 </template>
 
 <script>

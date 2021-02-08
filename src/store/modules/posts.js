@@ -1,10 +1,8 @@
-import request from '../../assets/libs/request'
-const axios = require('axios')
 const { url } = require('../urls')
 
 export default {
 	state: {
-		posts: []
+		posts: null
 	},
 	actions: {
 		getPosts: async ({ dispatch, commit }) => {

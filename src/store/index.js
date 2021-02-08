@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+
 import posts from './modules/posts'
 import news from './modules/news'
 import pageState from './modules/page-state'
 import modal from './modules/modal'
-import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -27,8 +28,6 @@ export default new Vuex.Store({
 				config.data = data
 			}
 			
-			console.log(config)
-
 			axios.request(config)
 				.then(success)
 				.catch(failure)

@@ -24,7 +24,10 @@
 					'change' : changing
 				}">
 				<div class="posts" v-show="display">
-					<template v-if="allPosts.length">
+					<template v-if="!allPosts">
+						<div class="no-content">Loading...</div>	
+					</template>
+					<template v-else-if="allPosts.length">
 						<Post
 							v-for="post in allPosts"
 							:key="post._id"
@@ -34,7 +37,10 @@
 					<div v-else class="no-content">There is no posts right now...</div>	
 				</div>
 				<div class="news" v-show="!display">
-					<template v-if="allNews.length">
+					<template v-if="!allNews">
+						<div class="no-content">Loading...</div>	
+					</template>
+					<template v-else-if="allNews.length">
 						<News 
 							v-for="news in allNews"
 							:key="news._id"

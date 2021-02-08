@@ -1,34 +1,43 @@
+import toLocal from '../../assets/libs/toLocal'
+
 export default {
 	state: {
-		display: 0,
-		tabs: [
-			{
-				title: 'News',
-				active: true
-			},
-			{
-				title: 'Posts',
-				active: false
-			}
-		],
+		pageState: JSON.parse(localStorage.getItem('page-state')) ??
+		{
+			display: 0,
+			tabs: [
+				{
+					title: 'News',
+					active: true
+				},
+				{
+					title: 'Posts',
+					active: false
+				}
+			],
+		},
 		changing: false
 	},
 	actions: {
-		changeDisplay: (ctx, config) => ctx.commit('changeDisplay', config),
-		changeTab: (ctx, idx) => ctx.commit('changeTab', idx),
-		isChanging: (ctx, value) => ctx.commit('isChanging', value)
+		changeDisplay: ({ commit }, config) => commit('changeDisplay', config),
+		changeTab: ({ commit }, idx) => commit('changeTab', idx),
+		isChanging: ({ commit }, value) => commit('isChanging', value)
 	},
 	mutations: {
-		changeDisplay: (state, config) => state.display = config,
+		changeDisplay: (state, config) => {
+			state.pageState.display = config
+			toLocal(state.pageState, 'page-state')
+		},
 		changeTab: (state, idx) => {
-			state.tabs.forEach(el => el.active = false)
-			state.tabs[idx].active = true
+			state.pageState.tabs.forEach(el => el.active = false)
+			state.pageState.tabs[idx].active = true
+			toLocal(state.pageState, 'page-state')
 		},
 		isChanging: (state, value) => state.changing = value
 	},
 	getters: {
-		display: state => state.display,
-		tabs: state => state.tabs,
+		display: state => state.pageState.display,
+		tabs: state => state.pageState.tabs,
 		changing: state => state.changing
 	}		
 }

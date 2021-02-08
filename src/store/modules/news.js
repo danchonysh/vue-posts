@@ -2,7 +2,7 @@ const { url } = require('../urls')
 
 export default {
 	state: {
-		news: []
+		news: null
 	},
 	actions: {
 		getNews: async ({ dispatch, commit }) => {

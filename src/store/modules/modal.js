@@ -1,31 +1,38 @@
+import toLocal from '../../assets/libs/toLocal'
+
 export default {
 	state: {
-		config: {},
-		show: false,
+		modalState: JSON.parse(localStorage.getItem('modal-state')) ??
+		{
+			config: {},
+			show: false
+		}
 	},
 	actions: {
-		changeModal: (ctx, option) => ctx.commit('changeModal', option),
-		showModal: (ctx, value) => ctx.commit('showModal', value)
+		changeModal: ({ commit }, option) => commit('changeModal', option),
+		showModal: ({ commit }, value) => commit('showModal', value)
 	},
 	mutations: {
 		changeModal: (state, { curr, prev }) => {
 			switch (curr) {
 				case 'news': 
-					state.config = {
+					state.modalState.config = {
 						title: 'Adding news',
 						type: 'news',
 						closable: false
 					}
+					toLocal(state.modalState, 'modal-state')
 					break;
 				case 'post':
-					state.config = {
+					state.modalState.config = {
 						title: 'Adding post',
 						type: 'post',
 						closable: false
 					}
+					toLocal(state.modalState, 'modal-state')
 					break;
 				case 'warn':
-					state.config = {
+					state.modalState.config = {
 						title: 'Warning',
 						type: 'warn',
 						content: `
@@ -36,13 +43,17 @@ export default {
 						prev,
 						closable: false
 					}
+					toLocal(state.modalState, 'modal-state')
 					break;
 			}
 		},
-		showModal: (state, value) => state.show = value
+		showModal: (state, value) => {
+			state.modalState.show = value
+			toLocal(state.modalState, 'modal-state')
+		}
 	},
 	getters: {
-		isVisible: state => state.show,
-		getModal: state => state.config
+		isVisible: state => state.modalState.show,
+		getModal: state => state.modalState.config
 	}
 }

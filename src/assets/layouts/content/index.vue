@@ -24,9 +24,10 @@
 					'change' : changing
 				}">
 				<div class="posts" v-show="display">
-					<template v-if="!allPosts">
+					<!-- <template v-if="!allPosts">
 						<div class="no-content">Loading...</div>	
-					</template>
+					</template> -->
+					<Loader v-if="!allPosts"/>
 					<template v-else-if="allPosts.length">
 						<Post
 							v-for="post in allPosts"
@@ -37,9 +38,10 @@
 					<div v-else class="no-content">There is no posts right now...</div>	
 				</div>
 				<div class="news" v-show="!display">
-					<template v-if="!allNews">
+					<!-- <template v-if="!allNews">
 						<div class="no-content">Loading...</div>	
-					</template>
+					</template> -->
+					<Loader v-if="!allNews"/>
 					<template v-else-if="allNews.length">
 						<News 
 							v-for="news in allNews"
@@ -61,9 +63,10 @@ import './content.scss'
 import Tab from '../../components/tab'
 import Post from '../../components/post'
 import News from '../../components/news'
+import Loader from '../../components/loader'
 
 export default {
-	components: { Tab, Post, News },
+	components: { Tab, Post, News, Loader },
 	computed: {
 		...mapGetters(['allPosts', 'allNews', 'tabs', 'display', 'changing'])
 	},	

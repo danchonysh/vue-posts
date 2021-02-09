@@ -36,19 +36,11 @@
 				<p ref="content" class="article__content">{{news.article}}</p>
 			</template>
 			<div class="article__footer">
-				<div class="confirm" v-if="editting">
-					<span
-						class="article__confirm"
-						@click="confirmEdit()">
-						OK
-					</span>
-					<span
-						class="article__confirm"
-						@click="cancelEdit()">
-						Cancel
-					</span>
-				</div>
-				<span 
+				<Confirmation 
+					v-if="editting"
+					@confirm="confirmEdit()"
+					@cancel="cancelEdit()"/>
+				<span
 					v-else
 					class="article__options" 
 					@click="toggleButtons()">
@@ -64,9 +56,13 @@
 import './news.scss'
 
 import formatting from '../../libs/timeFormatting'
+import Confirmation from '../../UI/confirmation'
 import { mapActions } from 'vuex'
 
 export default {
+	components: {
+		Confirmation
+	},
 	props: {
 		news: {
 			Type: Object,

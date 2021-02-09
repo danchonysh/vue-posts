@@ -1,3 +1,6 @@
+@import '../../scss/buttons.scss';
+@import '../../scss/edit-n-remove.scss';
+
 .post {
 	position: relative;
 	display: flex;
@@ -8,8 +11,11 @@
 	background-position: center;
 	margin: 1rem auto;
 	box-shadow: 0 3px 5px 3px rgba(0,0,0,.3);
-	width: min(100%, 500px);
 	height: 300px;
+	transition: transform .4s;
+	@media (max-width: 450px) {
+		height: 200px;
+	}
 	overflow: hidden;
 	&__text {
 		text-align: center;
@@ -42,15 +48,18 @@
 		border: none;
 		padding-top: .5rem;
 	}
-	&__delete {
-		font-size: 2rem;
-		color: #f9f9f9;
-		transition-property: opacity, color, transform;
+	&__options {
+		color: white;
+		line-height: 0;
+		transform: scale(1.2);
+		transition-property: color, transform, opacity;
 		transition-duration: .2s;
 		&:hover {
+			color: tomato;
 			cursor: pointer;
-			color: red;
-			transform: scale(1.1);
+		}
+		&:active {
+			transform: scale(1);
 		}
 	}	
 	&:hover &__footer, &:hover &__text {
@@ -66,5 +75,8 @@
 	}
 	&:hover &__photo {
 		filter: brightness(75%)
+	}
+	&.moved {
+		transform: translateX(45%);
 	}
 }

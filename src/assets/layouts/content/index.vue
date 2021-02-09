@@ -54,7 +54,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 import './content.scss'
-import Tab from '../../components/tab'
+import Tab from '../../UI/tab'
 import Post from '../../components/post'
 import News from '../../components/news'
 import Loader from '../../components/loader'

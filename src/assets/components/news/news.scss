@@ -1,48 +1,5 @@
 @import '../../scss/buttons.scss';
-
-.item-container {
-	position: relative;
-	width: min(500px, 100%);}
-
-.buttons__list {
-	top: 50%;
-	z-index: 0;
-	transform: translate(0, calc(-50% + .5rem));
-	position: absolute;
-	display: flex;
-	justify-content: center;
-	list-style-type: none;
-	width: auto;
-	transition-duration: .4s;
-	opacity: 1;
-	overflow: hidden;
-	&-item {
-		flex: 0 1 auto;
-		@include buttons(#eb3939, red);
-		&:first-child:hover {
-			background-color: rgb(68, 216, 68);
-			border-color: rgb(68, 216, 68);
-		}
-	}
-	@media(max-width: 500px) {
-		flex-direction: column;
-		border: solid 1px gray;
-		border-radius: 1rem;
-		margin-left: 5%;
-		&-item {
-			&:first-child, &:last-child {
-				border: none;
-				border-radius: 0;
-			}
-			&:last-child {
-				border-top: solid 1px gray;
-			}
-		}
-	}
-	&.hidden__list {
-		opacity: 0;
-	}
-}
+@import '../../scss/edit-n-remove.scss';
 
 .article {
 	background-color: whitesmoke;
@@ -55,6 +12,7 @@
 	box-shadow: 0 3px 5px 3px rgba(0,0,0,.3);
 	transition: transform .4s;
 	&__title {
+		width: 100%;
 		font-size: 1.25rem;
 		font-weight: 500;
 		padding-bottom: .5rem;
@@ -86,6 +44,7 @@
 		}
 	}
 	&__footer {
+		padding-top: .5rem;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -97,7 +56,6 @@
 		color: gray;
 		font-size: .8rem;
 		border: none;
-		padding-top: .5rem;
 	}
 	&__options {
 		line-height: 0;

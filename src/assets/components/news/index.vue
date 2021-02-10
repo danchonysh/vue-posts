@@ -1,6 +1,6 @@
 <template>
 	<div class="item-container" @click="toggleButtons()">
-		<ul 
+		<!-- <ul 
 			@click.stop
 			:class="{
 				'buttons__list': true,
@@ -16,7 +16,7 @@
 				@click="deleteNews(news._id)">
 				Remove
 			</li>
-		</ul>
+		</ul> -->
 		<section
 			@click.stop
 			:class="{

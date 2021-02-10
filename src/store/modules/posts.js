@@ -48,52 +48,24 @@ export default {
 				}, { root: true })
 			})
 		},
-		setPreview: async ({ dispatch, commit }, { data, id }) => {
+		editPost: async ({ dispatch, commit }, payload) => {
+			const { id, data } = payload
 			return new Promise((resolve, reject) => {
 				dispatch('request', {
 					url: `${url}posts/${id}`,
-					method: 'PATCH',
+					method: 'PUT',
 					data,
 					headers: {
 						'Content-Type': 'multipart/form-data'
 					},
 					success: res => {
-						commit('setPreview', res.data)
+						commit('editPost', { body: res.data, id })
 						resolve()
 					},
 					failure: err => reject(err)
 				}, { root: true })
 			})
 		},
-		deletePreview: async ({ dispatch, commit }, data) => {
-			return new Promise((resolve, reject) => {
-				dispatch('request', {
-					url: `${url}posts`,
-					method: 'DELETE',
-					data: { preview: data.preview },
-					success: res => {
-						commit('deletePreview', data)
-						resolve()
-					},
-					failure: err => reject(err)
-				}, { root: true })
-			})
-		},
-		editPost: async ({ dispatch, commit }, data) => {
-			const { id, body } = data
-			return new Promise((resolve, reject) => {
-				dispatch('request', {
-					url: `${url}posts/${id}`,
-					method: 'PUT',
-					data: body,
-					success: res => {
-						commit('editPost', { body, id })
-						resolve()
-					},
-					failure: err => reject(err) 
-				})
-			}, { root: true })
-		}
 	},
 	mutations: {
 		getPosts: (state, data) => state.posts = data,
@@ -103,27 +75,14 @@ export default {
 		deletePost: (state, id) => {
 			state.posts = state.posts.filter(el => el._id !== id)
 		},
-		setPreview: (state, data) => {
-			const item = state.previews.find(el => el.id === data.id)
-			if (item) {
-				item.preview = data.preview
-			} else {
-				state.previews.push(data)
-			}
-			console.log(state.previews)
-		},
 		editPost: (state, { body, id }) => {
 			const edited = state.posts.find(el => el._id === id)
 			edited.image = body.image
 			edited.caption = body.caption
 			edited.date = new Date(Date.now()).toLocaleString()
-		},
-		deletePreview: (state, { id }) => {
-			state.previews = state.previews.filter(el => el.id !== id)
 		}
 	},
 	getters: {
 		allPosts: state => state.posts,
-		getPreviews: state => state.previews
 	}
 }

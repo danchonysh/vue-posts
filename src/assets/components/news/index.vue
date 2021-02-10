@@ -1,22 +1,10 @@
 <template>
-	<div class="item-container" @click="toggleButtons()">
-		<!-- <ul 
-			@click.stop
-			:class="{
-				'buttons__list': true,
-				'hidden__list': !show
-			}">
-			<li 
-				class="buttons__list-item edit"
-				@click="enableEdit()">
-				Edit
-			</li>
-			<li 
-				class="buttons__list-item remove"
-				@click="deleteNews(news._id)">
-				Remove
-			</li>
-		</ul> -->
+	<div class="item-container" @click="show = false">
+		<Options 
+			:show="show"
+			@enable-edit="enableEdit()"
+			@delete="deleteNews(news._id)"
+		/>
 		<section
 			@click.stop
 			:class="{
@@ -60,11 +48,13 @@ import './news.scss'
 
 import formatting from '../../libs/timeFormatting'
 import Confirmation from '../../UI/confirmation'
+import Options from '../../UI/options'
 import { mapActions } from 'vuex'
 
 export default {
 	components: {
-		Confirmation
+		Confirmation,
+		Options
 	},
 	props: {
 		news: {
@@ -95,7 +85,6 @@ export default {
 			this.show = !this.show
 		},
 		enableEdit() {
-			this.show = false
 			this.editting = true
 			this.prevHeight = {
 				height: this.$refs.content.offsetHeight + 'px'

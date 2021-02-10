@@ -1,31 +1,19 @@
 <template>
-	<div class="item-container" @click="toggleButtons()">
-		<ul 
-			@click.stop
-			:class="{
-				'buttons__list': true,
-				'hidden__list': !show
-			}">
-			<li 
-				class="buttons__list-item edit"
-				@click="enableEdit()">
-				Edit
-			</li>
-			<li 
-				class="buttons__list-item remove"
-				@click="deletePost(post._id)">
-				Remove
-			</li>
-		</ul>
+	<div class="item-container" @click="show = false">
+		<Options
+			:show="show"
+			@enable-edit="enableEdit()"
+			@delete="deletePost(post._id)"
+		/>
 		<div 
-			@dblclick="editting ? $refs.upload.click() : null"
+			@dblclick="editing ? $refs.upload.click() : null"
 			@click.stop
 			:class="{
 				'post': true,
 				'moved': show
 			}"
 			:style="image">
-			<template v-if="editting">
+			<template v-if="editing">
 				<input @dblclick.stop
 					v-model="newPost.caption"
 					class="post__text input"
@@ -42,7 +30,7 @@
 			<p v-else class="post__text">{{post.caption}}</p>
 			<div class="post__footer" @dblclick.stop>
 				<Confirmation 
-					v-if="editting"
+					v-if="editing"
 					@confirm="confirmEdit()"
 					@cancel="cancelEdit()"/>
 				<span
@@ -62,11 +50,13 @@ import './post.scss'
 
 import formatting from '../../libs/timeFormatting'
 import Confirmation from '../../UI/confirmation'
+import Options from '../../UI/options'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
 	components: {
-		Confirmation
+		Confirmation,
+		Options
 	},
 	props: {
 		post: {
@@ -78,11 +68,12 @@ export default {
 		return {
 			formatted: formatting(this.post.date),
 			show: false,
-			editting: false,
+			editing: false,
 			newPost: {
-				image: '',
-				caption: this.post.caption
-			}
+				image: null,
+				caption: this.post.caption,
+			},
+			preview: ''
 		}
 	},
 	mounted() {
@@ -91,66 +82,54 @@ export default {
 		}, 60000)
 	},
 	methods: {
-		...mapActions(['deletePost', 'setPreview', 'editPost', 'deletePreview']),
+		...mapActions(['deletePost', 'editPost']),
 		toggleButtons() {
 			this.show = !this.show
 		},
 		enableEdit() {
 			this.show = false
-			this.editting = true
+			this.editing = true
 		},
 		cancelEdit() {
-			this.editting = false
-			if (this.newPost.image) {
-				this.deletePreview({ 
-					preview: this.newPost.image,
-					id: this.post._id
-				})
-			}
+			this.editing = false
+			this.preview = ''
 			this.newPost = {
-				caption: this.post.caption,
-				image: ''
+				image: null,
+				caption: this.post.caption
 			}
 		},
 		async getPreview() {
-			const file = this.$refs.file.files[0]
-			if (file) {
-				const data = new FormData()
-				data.append('image', file)
-				data.append('prev', this.newPost.image)
-				await this.setPreview({ data, id: this.post._id })
-				this.newPost.image = this.getPreviews.find(el => el.id === this.post._id).preview
+			this.newPost.image = this.$refs.file.files[0]
+			const reader = new FileReader()
+			reader.readAsDataURL(this.newPost.image)
+			reader.onload = e => {
+				this.preview = e.target.result
 			}
 		},
 		async confirmEdit() {
-			let { image, caption } = this.newPost 
-			let prev = this.post.image
-			if (!image)  {
-				this.newPost.image = this.post.image
-				prev = ''
-			}
-			if (this.newPost.image && caption) {
-				await this.editPost({
-					body: { ...this.newPost, prev },
-					id: this.post._id 
-				})
-				this.editting = false
+			const { image, caption } = this.newPost
+			if (image || caption) {
+				const data = new FormData()
+				data.append('caption', caption)
+				data.append('image', image)
+				data.append('prev', this.post.image)
+				console.log(data)
+				await this.editPost({ data, id: this.post._id})
+				this.editing = false
+				this.preview = ''
 				this.newPost = {
-					caption: this.post.caption,
-					image: ''
+					image: null,
+					caption: this.post.caption
 				}
 			}
 		}
 	},
 	computed: {
-		...mapGetters(['getPreviews']),
 		image() {
-			const image = this.editting && this.newPost.image
-				? this.newPost.image
-				: this.post.image
-			return {
-				backgroundImage: `url(${'http://localhost:3000/' + image})`
-			}
+			const image = this.preview 
+				? `url(${this.preview})` 
+				: `url(${'http://localhost:3000/' + this.post.image})`
+			return { backgroundImage: image }
 		}
 	}
 }

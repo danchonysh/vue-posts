@@ -1,6 +1,8 @@
 <template>
-	<div class="item-container">
-		<ul :class="{
+	<div class="item-container" @click="toggleButtons()">
+		<ul 
+			@click.stop
+			:class="{
 				'buttons__list': true,
 				'hidden__list': !show
 			}">
@@ -16,13 +18,29 @@
 			</li>
 		</ul>
 		<div 
+			@dblclick="editting ? $refs.upload.click() : null"
+			@click.stop
 			:class="{
 				'post': true,
 				'moved': show
 			}"
 			:style="image">
-			<p class="post__text">{{post.caption}}</p>
-			<div class="post__footer">
+			<template v-if="editting">
+				<input @dblclick.stop
+					v-model="newPost.caption"
+					class="post__text input"
+					type="text">
+				<label ref="upload" for="upload"></label>
+				<input 
+					@change="getPreview()"
+					type="file" 
+					id="upload"
+					ref="file"
+					style="display: none;"
+					accept="image/*">
+			</template>
+			<p v-else class="post__text">{{post.caption}}</p>
+			<div class="post__footer" @dblclick.stop>
 				<Confirmation 
 					v-if="editting"
 					@confirm="confirmEdit()"
@@ -44,7 +62,7 @@ import './post.scss'
 
 import formatting from '../../libs/timeFormatting'
 import Confirmation from '../../UI/confirmation'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
 	components: {
@@ -61,8 +79,10 @@ export default {
 			formatted: formatting(this.post.date),
 			show: false,
 			editting: false,
-			newImage: null,
-			title: ''
+			newPost: {
+				image: '',
+				caption: this.post.caption
+			}
 		}
 	},
 	mounted() {
@@ -71,7 +91,7 @@ export default {
 		}, 60000)
 	},
 	methods: {
-		...mapActions(['deletePost']),
+		...mapActions(['deletePost', 'setPreview', 'editPost', 'deletePreview']),
 		toggleButtons() {
 			this.show = !this.show
 		},
@@ -81,14 +101,55 @@ export default {
 		},
 		cancelEdit() {
 			this.editting = false
-			this.newImage = null
-			this.title = this.post.title
+			if (this.newPost.image) {
+				this.deletePreview({ 
+					preview: this.newPost.image,
+					id: this.post._id
+				})
+			}
+			this.newPost = {
+				caption: this.post.caption,
+				image: ''
+			}
+		},
+		async getPreview() {
+			const file = this.$refs.file.files[0]
+			if (file) {
+				const data = new FormData()
+				data.append('image', file)
+				data.append('prev', this.newPost.image)
+				await this.setPreview({ data, id: this.post._id })
+				this.newPost.image = this.getPreviews.find(el => el.id === this.post._id).preview
+			}
+		},
+		async confirmEdit() {
+			let { image, caption } = this.newPost 
+			let prev = this.post.image
+			if (!image)  {
+				this.newPost.image = this.post.image
+				prev = ''
+			}
+			if (this.newPost.image && caption) {
+				await this.editPost({
+					body: { ...this.newPost, prev },
+					id: this.post._id 
+				})
+				this.editting = false
+				this.newPost = {
+					caption: this.post.caption,
+					image: ''
+				}
+			}
 		}
 	},
 	computed: {
+		...mapGetters(['getPreviews']),
 		image() {
+			const image = this.editting && this.newPost.image
+				? this.newPost.image
+				: this.post.image
 			return {
-				backgroundImage: `url(${'http://localhost:3000/' + this.post.image})`
+				backgroundImage: `url(${'http://localhost:3000/' + image})`
 			}
 		}
 	}

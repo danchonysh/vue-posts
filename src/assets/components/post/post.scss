@@ -26,6 +26,15 @@
 		transition: opacity .2s;
 		color: white;
 		white-space: pre-wrap;
+		border-bottom: solid 1px lightgray;
+		&.input {
+			border: none;
+			outline: none;
+			font-size: 1rem;
+			font-family: inherit;
+			background-color: rgba(0,0,0,.6);
+			border-bottom: solid 1px tomato;
+		}
 	}
 	&__footer {
 		opacity: 0;
@@ -36,7 +45,6 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		border-top: solid 1px lightgray;
 	}
 	&__time {
 		margin: .5rem 0;

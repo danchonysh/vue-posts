@@ -1,6 +1,8 @@
 <template>
-	<div class="item-container">
-		<ul :class="{
+	<div class="item-container" @click="toggleButtons()">
+		<ul 
+			@click.stop
+			:class="{
 				'buttons__list': true,
 				'hidden__list': !show
 			}">
@@ -16,6 +18,7 @@
 			</li>
 		</ul>
 		<section
+			@click.stop
 			:class="{
 				'article': true,
 				'moved': show
@@ -105,10 +108,10 @@ export default {
 				article: this.news.article
 			}
 		},
-		confirmEdit() {
+		async confirmEdit() {
 			const { title, article } = this.edittedArticle
 			if (title && article) {
-				this.editNews({
+				await this.editNews({
 					id: this.news._id,
 					body: {
 						title,

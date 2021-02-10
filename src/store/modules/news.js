@@ -71,10 +71,10 @@ export default {
 			state.news = state.news.filter(el => el._id !== id)
 		},
 		editNews: (state, { body, id }) => {
-			const item = state.news.filter(el => el._id === id)[0]
-			item.title = body.title
-			item.article = body.article
-			item.date = body.date
+			const editted = state.news.filter(el => el._id === id)[0]
+			editted.title = body.title
+			editted.article = body.article
+			editted.date = new Date(Date.now()).toLocaleString()
 		}
 	},
 	getters: {

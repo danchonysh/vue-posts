@@ -3,7 +3,6 @@ const { url } = require('../urls')
 export default {
 	state: {
 		posts: null,
-		previews: [] 
 	},
 	actions: {
 		getPosts: async ({ dispatch, commit }) => {

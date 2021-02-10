@@ -5,7 +5,7 @@
 	background-color: whitesmoke;
 	width: min(500px, 100%);
 	position: relative;
-	padding: .5rem .75rem;
+	padding: 0 .75rem;
 	margin: 0 auto;
 	margin-top: 1rem;
 	border-radius: 5px;
@@ -15,7 +15,7 @@
 		width: 100%;
 		font-size: 1.25rem;
 		font-weight: 500;
-		padding-bottom: .5rem;
+		padding: .5rem 0;
 		word-wrap: break-word;
 		&.input {
 			border: none;
@@ -44,7 +44,8 @@
 		}
 	}
 	&__footer {
-		padding-top: .5rem;
+		height: 30px;
+		padding: .5rem 0;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -59,15 +60,14 @@
 	}
 	&__options {
 		line-height: 0;
-		transform: scale(1.2);
+		transform: scale(1.2) translateY(-7px);
 		transition: color .2s, transform .2s;
 		&:hover {
-			color: tomato;
+			color: #fcc766;
 			cursor: pointer;
 		}
-		
 		&:active {
-			transform: scale(1);
+			color: tomato;
 		}
 	}
 	&__confirm {

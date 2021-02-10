@@ -43,6 +43,7 @@
 					</label>
 					<textarea 
 						v-model="newPost.caption"
+						maxlength="194"
 						name="caption" 
 						class="new-post__content" 
 						type="text" 

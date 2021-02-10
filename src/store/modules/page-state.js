@@ -16,14 +16,17 @@ export default {
 				}
 			],
 		},
-		changing: false
+		changing: false,
+		oneActive: false
 	},
 	actions: {
+		setActive: ({ commit }, value) => commit('setActive', value),
 		changeDisplay: ({ commit }, config) => commit('changeDisplay', config),
 		changeTab: ({ commit }, idx) => commit('changeTab', idx),
 		isChanging: ({ commit }, value) => commit('isChanging', value)
 	},
 	mutations: {
+		setActive: (state, value) => state.oneActive = value,
 		changeDisplay: (state, config) => {
 			state.pageState.display = config
 			toLocal(state.pageState, 'page-state')
@@ -36,6 +39,7 @@ export default {
 		isChanging: (state, value) => state.changing = value
 	},
 	getters: {
+		oneActive: state => state.oneActive,
 		display: state => state.pageState.display,
 		tabs: state => state.pageState.tabs,
 		changing: state => state.changing

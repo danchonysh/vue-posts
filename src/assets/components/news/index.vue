@@ -11,13 +11,13 @@
 				'article': true,
 				'moved': show
 			}">
-			<template v-if="editting">
+			<template v-if="editing">
 				<input 
-					v-model="edittedArticle.title"
+					v-model="editedArticle.title"
 					class="article__title input"
 					type="text">
 				<textarea 
-					v-model="edittedArticle.article"
+					v-model="editedArticle.article"
 					:style="prevHeight"
 					class="article__content input">
 				</textarea>
@@ -28,7 +28,7 @@
 			</template>
 			<div class="article__footer">
 				<Confirmation 
-					v-if="editting"
+					v-if="editing"
 					@confirm="confirmEdit()"
 					@cancel="cancelEdit()"/>
 				<span
@@ -37,7 +37,7 @@
 					@click="toggleButtons()">
 					&hellip;
 				</span>
-				<p class="article__time">{{editting ? 'editting' : formatted}}</p>
+				<p class="article__time" ref="time">{{editing ? 'editing' : timing(news.date)}}</p>
 			</div>
 		</section>
 	</div>
@@ -64,11 +64,10 @@ export default {
 	},
 	data() {
 		return {
-			formatted: formatting(this.news.date),
 			show: false,
-			editting: false,
+			editing: false,
 			prevHeight: null,
-			edittedArticle: {
+			editedArticle: {
 				title: this.news.title,
 				article: this.news.article
 			}
@@ -76,29 +75,32 @@ export default {
 	},
 	mounted() {
 		setInterval(() => {
-			this.formatted = formatting(this.news.date)
+			this.$refs.time.textContent = formatting(this.news.date)
 		}, 60000)
 	},
 	methods: {
 		...mapActions(['deleteNews', 'editNews']),
+		timing(time) {
+			return formatting(time)
+		},
 		toggleButtons() {
 			this.show = !this.show
 		},
 		enableEdit() {
-			this.editting = true
+			this.editing = true
 			this.prevHeight = {
 				height: this.$refs.content.offsetHeight + 'px'
 			}
 		},
 		cancelEdit() {
-			this.editting = false
-			this.edittedArticle = {
+			this.editing = false
+			this.editedArticle = {
 				title: this.news.title,
 				article: this.news.article
 			}
 		},
 		async confirmEdit() {
-			const { title, article } = this.edittedArticle
+			const { title, article } = this.editedArticle
 			if (title && article) {
 				await this.editNews({
 					id: this.news._id,
@@ -108,8 +110,9 @@ export default {
 						date: new Date(Date.now()).toLocaleString()
 					}
 				})
+				this.editing = false
+				this.$refs.time.textContent = 'just now'
 			}
-			this.editting = false
 		}
 	}
 }

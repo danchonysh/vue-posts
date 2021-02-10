@@ -14,10 +14,13 @@
 			}"
 			:style="image">
 			<template v-if="editing">
-				<input @dblclick.stop
+				<textarea @dblclick.stop
+					:style="prevHeight"
+					maxlength="194"
 					v-model="newPost.caption"
 					class="post__text input"
 					type="text">
+				</textarea>
 				<label ref="upload" for="upload"></label>
 				<input 
 					@change="getPreview()"
@@ -27,19 +30,19 @@
 					style="display: none;"
 					accept="image/*">
 			</template>
-			<p v-else class="post__text">{{post.caption}}</p>
+			<p v-else class="post__text" ref="content">{{post.caption}}</p>
 			<div class="post__footer" @dblclick.stop>
 				<Confirmation 
 					v-if="editing"
 					@confirm="confirmEdit()"
 					@cancel="cancelEdit()"/>
 				<span
-					v-else
+					v-else-if="!oneActive"
 					class="post__options"
 					@click="toggleButtons()">
 					&hellip;
 				</span>
-				<p class="post__time">{{formatted}}</p>
+				<p class="post__time" ref="time">{{editing ? 'editing' : timing(post.date)}}</p>
 			</div>
 		</div>
 	</div>
@@ -66,7 +69,7 @@ export default {
 	},
 	data() {
 		return {
-			formatted: formatting(this.post.date),
+			prevHeight: null,
 			show: false,
 			editing: false,
 			newPost: {
@@ -78,17 +81,23 @@ export default {
 	},
 	mounted() {
 		setInterval(() => {
-			this.formatted = formatting(this.post.date)
+			this.$refs.time.textContent = formatting(this.post.date)
 		}, 60000)
 	},
 	methods: {
-		...mapActions(['deletePost', 'editPost']),
+		...mapActions(['deletePost', 'editPost', 'setActive']),
+		timing(time) {
+			return formatting(time)
+		},
 		toggleButtons() {
 			this.show = !this.show
 		},
 		enableEdit() {
 			this.show = false
 			this.editing = true
+			this.prevHeight = {
+				height: this.$refs.content.offsetHeight + 'px'
+			}
 		},
 		cancelEdit() {
 			this.editing = false
@@ -102,7 +111,7 @@ export default {
 			this.newPost.image = this.$refs.file.files[0]
 			const reader = new FileReader()
 			reader.readAsDataURL(this.newPost.image)
-			reader.onload = e => {
+			reader.onload = (e) => {
 				this.preview = e.target.result
 			}
 		},
@@ -113,23 +122,29 @@ export default {
 				data.append('caption', caption)
 				data.append('image', image)
 				data.append('prev', this.post.image)
-				console.log(data)
 				await this.editPost({ data, id: this.post._id})
 				this.editing = false
-				this.preview = ''
 				this.newPost = {
 					image: null,
 					caption: this.post.caption
 				}
+				this.$refs.time.textContent = 'just now'
 			}
 		}
 	},
 	computed: {
+		...mapGetters(['oneActive']),
 		image() {
-			const image = this.preview 
-				? `url(${this.preview})` 
+			const prev = this.preview
+			const image = prev
+				? `url(${prev})` 
 				: `url(${'http://localhost:3000/' + this.post.image})`
 			return { backgroundImage: image }
+		}
+	},
+	watch: {
+		editing() {
+			this.setActive(this.editing ? this.post._id : false)
 		}
 	}
 }

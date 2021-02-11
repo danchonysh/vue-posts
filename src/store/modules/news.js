@@ -1,8 +1,9 @@
 const { url } = require('../urls')
+import ContentClass from '../../assets/libs/ContentClass'
 
 export default {
 	state: {
-		news: null
+		news: []
 	},
 	actions: {
 		getNews: async ({ dispatch, commit }) => {
@@ -63,21 +64,26 @@ export default {
 		}
 	},
 	mutations: {
-		getNews: (state, data) => state.news = data,
+		getNews: (state, content) => state.news = new ContentClass({
+			pattern: [ 'title', 'article', '_id', 'date', '__v' ],
+			content,
+		}),
 		addNews: (state, news) => {
-			state.news.unshift(news)
+			state.news.add(news)
 		},
 		deleteNews: (state, id) => {
-			state.news = state.news.filter(el => el._id !== id)
+			state.news.remove({_id: id})
 		},
 		editNews: (state, { body, id }) => {
-			const editted = state.news.filter(el => el._id === id)[0]
-			editted.title = body.title
-			editted.article = body.article
-			editted.date = new Date(Date.now()).toLocaleString()
+			const { article, title } = body
+			state.news.edit({_id: id}, {
+				article,
+				title,
+				date: state.news.getDate()
+			})
 		}
 	},
 	getters: {
-		allNews: state => state.news
+		allNews: state => state.news.newFirst
 	}
 }

@@ -27,7 +27,7 @@
 					<Loader v-if="!allPosts"/>
 					<template v-else-if="allPosts.length">
 						<Post
-							v-for="post in filteredPosts"
+							v-for="post in allPosts"
 							:key="post._id"
 							:post="post"
 						/>
@@ -38,7 +38,7 @@
 					<Loader v-if="!allNews"/>
 					<template v-else-if="allNews.length">
 						<News 
-							v-for="news in filteredNews"
+							v-for="news in allNews"
 							:key="news._id"
 							:news="news"
 						/>
@@ -61,15 +61,7 @@ import Loader from '../../components/loader'
 
 export default {
 	components: { Tab, Post, News, Loader },
-	computed: {
-		...mapGetters(['allPosts', 'allNews', 'tabs', 'display', 'changing']),
-		filteredNews() {
-			return this.allNews.sort((a,b) => Date.parse(b.date) - Date.parse(a.date))
-		},
-		filteredPosts() {
-			return this.allPosts.sort((a,b) => Date.parse(b.date) - Date.parse(a.date))
-		}
-	},	
+	computed: mapGetters(['allPosts', 'allNews', 'tabs', 'display', 'changing']),
 	methods: {
 		...mapActions(['changeDisplay', 'changeTab', 'isChanging', 'showModal', 'changeModal', 'getNews', 'getPosts']),
 		tabClick(idx) {

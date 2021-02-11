@@ -1,8 +1,9 @@
+import ContentClass from '../../assets/libs/ContentClass'
 const { url } = require('../urls')
 
 export default {
 	state: {
-		posts: null,
+		posts: [],
 	},
 	actions: {
 		getPosts: async ({ dispatch, commit }) => {
@@ -67,21 +68,26 @@ export default {
 		},
 	},
 	mutations: {
-		getPosts: (state, data) => state.posts = data,
+		getPosts: (state, content) => state.posts = new ContentClass({
+			pattern: [ 'image', 'caption', '_id', 'date', '__v' ],
+			content,
+		}),
 		addPost: (state, posts) => {
-			state.posts.unshift(posts)
+			state.posts.add(posts)
 		},
 		deletePost: (state, id) => {
-			state.posts = state.posts.filter(el => el._id !== id)
+			state.posts.remove({_id: id})
 		},
 		editPost: (state, { body, id }) => {
-			const edited = state.posts.find(el => el._id === id)
-			edited.image = body.image
-			edited.caption = body.caption
-			edited.date = new Date(Date.now()).toLocaleString()
+			const { image, caption } = body
+			state.posts.edit({_id: id}, {
+				image,
+				caption,
+				date: state.posts.getDate()
+			})
 		}
 	},
 	getters: {
-		allPosts: state => state.posts,
+		allPosts: state => state.posts.newFirst,
 	}
 }

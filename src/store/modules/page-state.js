@@ -17,15 +17,18 @@ export default {
 			],
 		},
 		changing: false,
-		oneActive: false
+		oneActive: false,
+		currentTime: Date.now()
 	},
 	actions: {
+		updateTime: ({ commit }, time) => commit('updateTime', time),
 		setActive: ({ commit }, value) => commit('setActive', value),
 		changeDisplay: ({ commit }, config) => commit('changeDisplay', config),
 		changeTab: ({ commit }, idx) => commit('changeTab', idx),
 		isChanging: ({ commit }, value) => commit('isChanging', value)
 	},
 	mutations: {
+		updateTime: (state, time) => state.currentTime = time,
 		setActive: (state, value) => state.oneActive = value,
 		changeDisplay: (state, config) => {
 			state.pageState.display = config
@@ -39,6 +42,7 @@ export default {
 		isChanging: (state, value) => state.changing = value
 	},
 	getters: {
+		getTime: state => state.currentTime,
 		oneActive: state => state.oneActive,
 		display: state => state.pageState.display,
 		tabs: state => state.pageState.tabs,

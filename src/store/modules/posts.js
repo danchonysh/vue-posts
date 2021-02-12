@@ -4,6 +4,7 @@ const { url } = require('../urls')
 export default {
 	state: {
 		posts: [],
+		formattedTime: []
 	},
 	actions: {
 		getPosts: async ({ dispatch, commit }) => {

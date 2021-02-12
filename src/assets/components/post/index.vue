@@ -42,7 +42,7 @@
 					@click="toggleButtons()">
 					&hellip;
 				</span>
-				<p class="post__time" ref="time">{{editing ? 'editing' : timing(post.date)}}</p>
+				<p class="post__time" ref="time">{{editing ? 'editing' : time }}</p>
 			</div>
 		</div>
 	</div>
@@ -73,22 +73,14 @@ export default {
 			show: false,
 			editing: false,
 			newPost: {
-				image: null,
+				image: this.post.image,
 				caption: this.post.caption,
 			},
 			preview: ''
 		}
 	},
-	mounted() {
-		setInterval(() => {
-			this.$refs.time.textContent = formatting(this.post.date)
-		}, 60000)
-	},
 	methods: {
 		...mapActions(['deletePost', 'editPost', 'setActive']),
-		timing(time) {
-			return formatting(time)
-		},
 		toggleButtons() {
 			this.show = !this.show
 		},
@@ -117,11 +109,12 @@ export default {
 		},
 		async confirmEdit() {
 			const { image, caption } = this.newPost
-			if (image || caption) {
+			if ((image || caption) && (image !== this.post.image || caption !== this.post.caption)) {
 				const data = new FormData()
 				data.append('caption', caption)
 				data.append('image', image)
 				data.append('prev', this.post.image)
+				data.append('date', new Date(Date.now()).toLocaleString())
 				await this.editPost({ data, id: this.post._id})
 				this.editing = false
 				this.newPost = {
@@ -133,13 +126,16 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['oneActive']),
+		...mapGetters(['oneActive', 'getTime']),
 		image() {
 			const prev = this.preview
 			const image = prev
 				? `url(${prev})` 
 				: `url(${'http://localhost:3000/' + this.post.image})`
 			return { backgroundImage: image }
+		},
+		time() {
+			return formatting(this.post.date, this.getTime)
 		}
 	},
 	watch: {

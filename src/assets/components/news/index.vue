@@ -37,7 +37,7 @@
 					@click="toggleButtons()">
 					&hellip;
 				</span>
-				<p class="article__time" ref="time">{{editing ? 'editing' : timing(news.date)}}</p>
+				<p class="article__time" ref="time">{{editing ? 'editing' : time}}</p>
 			</div>
 		</section>
 	</div>
@@ -49,7 +49,7 @@ import './news.scss'
 import formatting from '../../libs/timeFormatting'
 import Confirmation from '../../UI/confirmation'
 import Options from '../../UI/options'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
 	components: {
@@ -73,16 +73,14 @@ export default {
 			}
 		}
 	},
-	mounted() {
-		setInterval(() => {
-			this.$refs.time.textContent = formatting(this.news.date)
-		}, 60000)
+	computed: {
+		...mapGetters(['getTime']),
+		time() {
+			return formatting(this.news.date, this.getTime)
+		}
 	},
 	methods: {
 		...mapActions(['deleteNews', 'editNews']),
-		timing(time) {
-			return formatting(time)
-		},
 		toggleButtons() {
 			this.show = !this.show
 		},

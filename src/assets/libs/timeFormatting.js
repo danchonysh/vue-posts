@@ -1,4 +1,4 @@
-export default function formatting(time, lang = 'en') {
+export default function formatting(time, current, lang = 'en') {
 	const date = new Date(time)
 	
 	const year = date.getFullYear()
@@ -16,7 +16,7 @@ export default function formatting(time, lang = 'en') {
 		? date.getMinutes() 
 		: `0${date.getMinutes()}`
 
-	const current = new Date(Date.now()) 
+	// const current = new Date(Date.now()) 
 
 	const differenceMin = Math.floor((current - date)/60000)
 	const differenceHour = Math.floor(differenceMin/60)

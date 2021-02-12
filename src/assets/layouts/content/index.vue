@@ -63,7 +63,7 @@ export default {
 	components: { Tab, Post, News, Loader },
 	computed: mapGetters(['allPosts', 'allNews', 'tabs', 'display', 'changing']),
 	methods: {
-		...mapActions(['changeDisplay', 'changeTab', 'isChanging', 'showModal', 'changeModal', 'getNews', 'getPosts']),
+		...mapActions(['changeDisplay', 'changeTab', 'isChanging', 'showModal', 'changeModal', 'getNews', 'getPosts', 'updateTime']),
 		tabClick(idx) {
 			if (this.display !== idx) {
 				this.changeTab(idx)
@@ -84,6 +84,9 @@ export default {
 	async mounted() {
 		await this.getNews()
 		await this.getPosts()
+		setInterval(() => {
+			this.updateTime(Date.now())
+		}, 60000)		
 	}
 } 
 </script>

@@ -109,6 +109,14 @@
 	&__content {
 		flex: 1 0 auto;
 		font-size: .75rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		&-warning {
+			height: 100%;
+			text-align: center;
+			vertical-align: middle;
+		}
 	}
 	&__footer {
 		padding: .5rem 0;

@@ -16,8 +16,6 @@ export default function formatting(time, current, lang = 'en') {
 		? date.getMinutes() 
 		: `0${date.getMinutes()}`
 
-	// const current = new Date(Date.now()) 
-
 	const differenceMin = Math.floor((current - date)/60000)
 	const differenceHour = Math.floor(differenceMin/60)
 	const differenceDay = Math.floor(differenceHour/24)
@@ -66,7 +64,7 @@ export default function formatting(time, current, lang = 'en') {
 	if (differenceHour === 1) return `${singleHour} ${ago}`
 	if (differenceHour <= 23) return `${differenceHour} ${hourWord} ${ago}`
 	if (differenceDay === 1) return `${singleDay} ${ago}`
-	if (differenceDay <= 29) return `${differenceDay} ${dayWord} ${ago}`
+	if (differenceDay <= 6) return `${differenceDay} ${dayWord} ${ago}`
 	if (differenceWeek === 1) return `${singleWeek} ${ago}`
 	if (differenceWeek > 1 && differenceWeek <= 3) return `${differenceWeek} ${weekWord} ${ago}`
 	if (differenceWeek > 4) return `${day}.${month}.${year} \\ ${hour}:${minute}`

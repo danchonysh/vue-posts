@@ -2,58 +2,23 @@ import toLocal from '../../assets/libs/toLocal'
 
 export default {
 	state: {
-		modalState: JSON.parse(localStorage.getItem('modal-state')) ??
-		{
-			config: {},
-			show: false
-		}
+		news: false,
+		post: false,
+		warn: false
 	},
 	actions: {
-		changeModal: ({ commit }, option) => commit('changeModal', option),
-		showModal: ({ commit }, value) => commit('showModal', value)
+		showModal: ({ commit }, type) => commit('showModal', type),
+		hideModal: ({ commit }, type) => commit('hideModal', type)
 	},
 	mutations: {
-		changeModal: (state, { curr, prev }) => {
-			switch (curr) {
-				case 'news': 
-					state.modalState.config = {
-						title: 'Adding news',
-						type: 'news',
-						closable: false
-					}
-					toLocal(state.modalState, 'modal-state')
-					break;
-				case 'post':
-					state.modalState.config = {
-						title: 'Adding post',
-						type: 'post',
-						closable: false
-					}
-					toLocal(state.modalState, 'modal-state')
-					break;
-				case 'warn':
-					state.modalState.config = {
-						title: 'Warning',
-						type: 'warn',
-						content: `
-							<p 	
-								class="modal__content-warning">
-								Please, fill in the blank!
-							</p>`,
-						prev,
-						closable: false
-					}
-					toLocal(state.modalState, 'modal-state')
-					break;
-			}
-		},
-		showModal: (state, value) => {
-			state.modalState.show = value
-			toLocal(state.modalState, 'modal-state')
-		}
+		showModal: (state, type) => state[type] = true,
+		hideModal: (state, type) => state[type] = false
 	},
 	getters: {
-		isVisible: state => state.modalState.show,
-		getModal: state => state.modalState.config
+		modals: (state) => ({
+			news: state.news,
+			post: state.post,
+			warn: state.warn
+		}) 
 	}
 }

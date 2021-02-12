@@ -14,7 +14,7 @@
 				</nav>
 				<button 
 					class="add" 
-					@click="toggleModal(display ? 'post' : 'news')">
+					@click="showModal(display ? 'post' : 'news')">
 					Add
 				</button>
 			</div>
@@ -63,7 +63,7 @@ export default {
 	components: { Tab, Post, News, Loader },
 	computed: mapGetters(['allPosts', 'allNews', 'tabs', 'display', 'changing']),
 	methods: {
-		...mapActions(['changeDisplay', 'changeTab', 'isChanging', 'showModal', 'changeModal', 'getNews', 'getPosts', 'updateTime']),
+		...mapActions(['changeDisplay', 'changeTab', 'isChanging', 'showModal', 'getNews', 'getPosts', 'updateTime']),
 		tabClick(idx) {
 			if (this.display !== idx) {
 				this.changeTab(idx)
@@ -75,10 +75,6 @@ export default {
 					this.isChanging(false)
 				}, 1000)
 			}
-		},
-		toggleModal(curr) {
-			this.changeModal({ curr })
-			this.showModal(true)
 		}
 	},
 	async mounted() {

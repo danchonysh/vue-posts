@@ -1,5 +1,5 @@
-const { url } = require('../urls')
 import ContentClass from '../../assets/libs/ContentClass'
+const { url } = require('../urls')
 
 export default {
 	state: {
@@ -66,20 +66,16 @@ export default {
 	mutations: {
 		getNews: (state, content) => state.news = new ContentClass({
 			pattern: [ 'title', 'article', '_id', 'date', '__v' ],
-			content,
+			content
 		}),
-		addNews: (state, news) => {
-			state.news.add(news)
-		},
-		deleteNews: (state, id) => {
-			state.news.remove({_id: id})
-		},
+		addNews: (state, news) => state.news.add(news),
+		deleteNews: (state, id) => state.news.remove({_id: id}),
 		editNews: (state, { body, id }) => {
 			const { article, title } = body
 			state.news.edit({_id: id}, {
 				article,
 				title,
-				date: state.news.getDate()
+				date: new Date(Date.now()).toLocaleString()
 			})
 		}
 	},

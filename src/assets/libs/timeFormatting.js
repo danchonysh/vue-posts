@@ -67,5 +67,5 @@ export default function formatting(time, current, lang = 'en') {
 	if (differenceDay <= 6) return `${differenceDay} ${dayWord} ${ago}`
 	if (differenceWeek === 1) return `${singleWeek} ${ago}`
 	if (differenceWeek > 1 && differenceWeek <= 3) return `${differenceWeek} ${weekWord} ${ago}`
-	if (differenceWeek > 4) return `${day}.${month}.${year} \\ ${hour}:${minute}`
+	if (differenceWeek > 4) return `${day}.${month}.${year}`
 }

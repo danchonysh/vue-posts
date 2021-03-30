@@ -71,14 +71,10 @@ export default {
 	mutations: {
 		getPosts: (state, content) => state.posts = new ContentClass({
 			pattern: [ 'image', 'caption', '_id', 'date', '__v' ],
-			content,
+			content
 		}),
-		addPost: (state, posts) => {
-			state.posts.add(posts)
-		},
-		deletePost: (state, id) => {
-			state.posts.remove({_id: id})
-		},
+		addPost: (state, posts) => state.posts.add(posts),
+		deletePost: (state, id) => state.posts.remove({_id: id}),
 		editPost: (state, { body, id }) => {
 			const { image, caption } = body
 			state.posts.edit({_id: id}, {
